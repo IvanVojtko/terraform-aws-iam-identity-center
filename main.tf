@@ -190,8 +190,9 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "pset_customer_manage
   instance_arn       = local.ssoadmin_instance_arn
   permission_set_arn = aws_ssoadmin_permission_set.pset[each.value.pset_name].arn
   customer_managed_policy_reference {
-    name = each.value.policy_name
-    path = "/"
+    # If passed value contains path, split it between name and path
+    name = element(split("/", each.value.policy_name), length(split("/", each.value.policy_name)) - 1)
+    path = length(split("/", each.value.policy_name)) > 1 ? "/" + join("/", slice(split("/", each.value.policy_name), 0, length(split("/", each.value.policy_name)) - 1)) + "/" : "/"
   }
 
 }
