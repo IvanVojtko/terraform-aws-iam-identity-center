@@ -192,7 +192,7 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "pset_customer_manage
   customer_managed_policy_reference {
     # If passed value contains path, split it between name and path
     name = element(split("/", each.value.policy_name), length(split("/", each.value.policy_name)) - 1)
-    path = length(split("/", each.value.policy_name)) > 1 ? "/" + join("/", slice(split("/", each.value.policy_name), 0, length(split("/", each.value.policy_name)) - 1)) + "/" : "/"
+    path = length(split("/", var.input)) > 1 ? join("", [join("/", slice(split("/", var.input), 0, length(split("/", var.input)) - 1)), "/"]) : "/"
   }
 
 }
